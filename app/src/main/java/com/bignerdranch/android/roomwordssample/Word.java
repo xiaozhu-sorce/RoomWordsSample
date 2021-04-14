@@ -1,5 +1,6 @@
 package com.bignerdranch.android.roomwordssample;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -7,16 +8,14 @@ import androidx.room.PrimaryKey;
 
 @Entity(tableName = "word_table")
 public class Word {
+
     @PrimaryKey
-    @Nullable
+    @NonNull
     @ColumnInfo(name = "word")
     private String mWord;
 
-    public Word (@Nullable String word){
-        this.mWord = word;
-    }
+    public Word(@NonNull String word) {
+        this.mWord = word;}
 
-    public String getWord(){
-        return this.mWord;
-    }
+    public String getWord(){return this.mWord;}
 }
