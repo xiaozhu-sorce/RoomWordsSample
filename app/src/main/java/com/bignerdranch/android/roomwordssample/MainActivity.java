@@ -13,6 +13,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -59,6 +60,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        ItemTouchHelper helper = new ItemTouchHelper(
+                new ItemTouchHelper.SimpleCallback(0,
+                        ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT) {
+                    @Override
+                    public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                        return false;
+                    }
+
+                    @Override
+                    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                        int positon = viewHolder.getAdapterPosition();
+                        Word myWord = adapter.getWordAtPosition(positon);
+                        Toast.makeText(MainActivity.this,"Deleting "+myWord.getWord(),Toast.LENGTH_LONG).show();
+
+                        mWordViewModel.deleteWord(myWord);
+                    }
+                }
+        );
+
+        helper.attachToRecyclerView(recyclerView);
+
     }
 
     @Override
@@ -76,7 +98,10 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.clear_data) {
+            Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
+
+            mWordViewModel.deleteAll();
             return true;
         }
 
